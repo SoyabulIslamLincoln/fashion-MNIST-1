@@ -37,10 +37,6 @@ So! - here starts my adventure in building a neural network classifier using Fas
 
 **Goal:** To show how the training and test accuracy improves with the neural network optimizations.
 
-As Tim Gunn has famously said, I've got to:
-
-<img src="https://i.pinimg.com/originals/da/13/62/da13623eb75d1a4818887b9715a4d631.jpg" width="400">
-
 
 # Simple Neural Network
 ```python
@@ -64,3 +60,5 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 ```
 
+....
+[WIP] 
