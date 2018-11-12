@@ -1,2 +1,2 @@
 # fashion-MNIST
-An implementation of neural network classification using Fashion MNIST and Keras
+Training my first neural network classifier using Fashion MNIST and Tensorflow Keras
