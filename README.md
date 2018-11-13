@@ -60,5 +60,25 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 ```
 
+There are 60,000 images in the training set, each is 28x28 pixels
+```python
+train_images.shape
+(60000, 28, 28) 
+```
+There are 60,000 labels in the training set, and each label is an integer between 0 and 9
+
+```python
+len(train_labels)
+```
+```
+60000
+```
+```python 
+train_labels
+```
+```
+array([9, 0, 0, ..., 3, 0, 5], dtype=uint8)
+```
+```
 ....
 [WIP] 
