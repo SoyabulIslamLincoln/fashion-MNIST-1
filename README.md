@@ -32,7 +32,7 @@ This dataset also contains 60,000 training images and 10,000 test images, and ha
 
 So! - here starts my adventure in building a neural network classifier using Fashion MNIST. 
 
-- First, I build a simple neural network using 3 fully-connected layers. 
+- First, I build a simple neural network using 3 fully-connected layers 
 - Then, I build a slightly larger Convolutional Neural Network with Dropout Regularization.
 
 **Goal:** To show how the training and test accuracy improves with the neural network optimizations.
@@ -73,12 +73,39 @@ len(train_labels)
 ```
 60000
 ```
-```python 
-train_labels
+There are 10,000 images in the test set, each is 28x28 pixels
+```python
+test_images.shape
 ```
 ```
-array([9, 0, 0, ..., 3, 0, 5], dtype=uint8)
+(10000, 28, 28)
+```
+Finally, there are 10,000 labels in the test set
+```python
+len(test_labels)
 ```
 ```
-....
-[WIP] 
+10000
+```
+
+Scale the images to a range of 0 to 1
+
+```python
+train_images = train_images / 255.0
+test_images = test_images / 255.0
+```
+
+Simple NN: Build the Model
+Here we have 3 fully connected layers. 
+1st layer: "unrolls" the images from a 2d-array of 28 by 28 pixels to a 1d-array of 28 * 28 = 784 pixels
+2nd layer: Fully-connected layer. Has 128 nodes.
+3rd layer: 10-node softmax layer, which returns an array of 10 probability scores that sum to 1. 
+```python
+model = keras.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28)),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
+])
+```
+
+[WIP]
