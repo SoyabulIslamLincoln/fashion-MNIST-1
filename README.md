@@ -49,23 +49,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-Load the dataset
+First, we load the dataset
 ```python
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
 ```
-Store the image class names
+The class names are not included in the dataset so we store them here:
 ```python
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 ```
 
-There are 60,000 images in the training set, each is 28x28 pixels
+We'll do a little bit of insights into the data set. There are 60,000 images in the training set, each is 28x28 pixels:
 ```python
 train_images.shape
 (60000, 28, 28) 
 ```
-There are 60,000 labels in the training set, and each label is an integer between 0 and 9
+There are 60,000 labels in the training set, and each label is an integer between 0 and 9:
 
 ```python
 len(train_labels)
@@ -73,14 +73,14 @@ len(train_labels)
 ```
 60000
 ```
-There are 10,000 images in the test set, each is 28x28 pixels
+There are 10,000 images in the test set, each is 28x28 pixels:
 ```python
 test_images.shape
 ```
 ```
 (10000, 28, 28)
 ```
-Finally, there are 10,000 labels in the test set
+And finally, there are 10,000 labels in the test set:
 ```python
 len(test_labels)
 ```
@@ -88,17 +88,19 @@ len(test_labels)
 10000
 ```
 
-Scale the images to a range of 0 to 1
+We need to preprocess the data; we scale the images to a range of 0 to 1 by dividing by 255 (range of pixel values): 
 
 ```python
 train_images = train_images / 255.0
 test_images = test_images / 255.0
 ```
 
-Simple NN: Build the Model
-Here we have 3 fully connected layers. 
+Here is where we build the model for a Simple NN with 3 layers 
+
 1st layer: "unrolls" the images from a 2d-array of 28 by 28 pixels to a 1d-array of 28 * 28 = 784 pixels
+
 2nd layer: Fully-connected layer. Has 128 nodes.
+
 3rd layer: 10-node softmax layer, which returns an array of 10 probability scores that sum to 1. 
 ```python
 model = keras.Sequential([
