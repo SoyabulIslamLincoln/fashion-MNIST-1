@@ -32,10 +32,10 @@ This dataset also contains 60,000 training images and 10,000 test images, and ha
 
 So! - here starts my adventure in building a neural network classifier using Fashion MNIST. 
 
-- First, I build a simple neural network using 3 fully-connected layers 
-- Then, I build a slightly larger Convolutional Neural Network with Dropout Regularization.
+- First, I build a simple 3 layer neural network with fully connected layers 
+- Then, I build a slightly larger Convolutional Neural Network
 
-**Goal:** To show how the training and test accuracy improves with the neural network optimizations.
+**Goal:** To show how the training and test accuracy improves with changing the neural network architecture.
 
 
 # Simple Neural Network
@@ -88,7 +88,7 @@ len(test_labels)
 10000
 ```
 
-We need to preprocess the data; we scale the images to a range of 0 to 1 by dividing by 255 (range of pixel values): 
+We need to preprocess the data; we scale the images to a range of 0 to 1 by dividing by 255 (image range of pixel values): 
 
 ```python
 train_images = train_images / 255.0
@@ -96,12 +96,7 @@ test_images = test_images / 255.0
 ```
 
 Here is where we build the model for a Simple NN with 3 layers 
-
-1st layer: "unrolls" the images from a 2d-array of 28 by 28 pixels to a 1d-array of 28 * 28 = 784 pixels
-
-2nd layer: Fully-connected layer. Has 128 nodes.
-
-3rd layer: 10-node softmax layer, which returns an array of 10 probability scores that sum to 1. 
+ 
 ```python
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(28, 28)),
@@ -109,5 +104,170 @@ model = keras.Sequential([
     keras.layers.Dense(10, activation='softmax')
 ])
 ```
+We can see some details about the model using model.summary()
+```python
+model.summary()
+```
+```python
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+flatten_9 (Flatten)          (None, 784)               0         
+_________________________________________________________________
+dense_18 (Dense)             (None, 128)               100480    
+_________________________________________________________________
+dense_19 (Dense)             (None, 10)                1290      
+=================================================================
+Total params: 101,770
+Trainable params: 101,770
+Non-trainable params: 0
+_________________________________________________________________
+```
+
+1st layer: "unrolls" the images from a 2d-array of 28 by 28 pixels to a 1d-array of 28 * 28 = 784 pixels
+
+2nd layer: Fully-connected layer. Has 128 nodes.
+
+3rd layer: 10-node softmax layer, which returns an array of 10 probability scores (for the 10 classes) that sum to 1.
+
+We then compile the model using Adam optimizer:
+```python
+model.compile(optimizer=tf.train.AdamOptimizer(), 
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+```
+
+Finally, we train the model:
+```python
+model.fit(train_images, train_labels, epochs=5)
+```
+```python
+Epoch 1/5
+60000/60000 [==============================] - 5s 75us/step - loss: 0.4993 - acc: 0.8247
+Epoch 2/5
+60000/60000 [==============================] - 4s 72us/step - loss: 0.3765 - acc: 0.8649
+Epoch 3/5
+60000/60000 [==============================] - 4s 71us/step - loss: 0.3379 - acc: 0.8766
+Epoch 4/5
+60000/60000 [==============================] - 4s 71us/step - loss: 0.3129 - acc: 0.8849
+Epoch 5/5
+60000/60000 [==============================] - 5s 78us/step - loss: 0.2954 - acc: 0.8902
+```
+
+Then evaluate the accuracy:
+```python
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print('Test accuracy:', test_acc)
+```
+```python
+print('Test accuracy:', test_acc)
+```
+```python
+10000/10000 [==============================] - 0s 39us/step
+Test accuracy: 0.8732
+```
+
+We get to a train accuracy of 89.02% and a test accuracy of 87.32%, not bad for a 3 layer network!
+
+But can we do better? 
+
+# Convolutional Neural Network (CNN)
+Convolutional Neural Networks are excellent NN architectures to apply to computer vision tasks. CNNs have been proven to be very effective effective for image recognition, object recognition, and even natural language processing tasks. An excellent  description on CNNs can be found in [Stanford's CS231n course notes:](http://cs231n.github.io/convolutional-networks/)
+
+For this example, we use the same data set from the simple neural network example above, but we build a different model; in particular, this CNN model is based on the LeNet architecture, first introduced by Yann LeCun et a. in the paper [Gradient-Based Learning Applied to Document Recognition](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf). 
+
+
+<img src ="https://www.pyimagesearch.com/wp-content/uploads/2016/06/lenet_architecture-768x226.png" width="600" align="center"> 
+
+
+*LeNet Architecture Visualization. [Source](https://www.pyimagesearch.com/2016/08/01/lenet-convolutional-neural-network-in-python).*
+
+ 
+Let's build the model:
+```python
+model = keras.models.Sequential([
+    keras.layers.Conv2D(20, (5,5), padding='same', activation='relu', input_shape=(28,28,1)),
+    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
+    keras.layers.Conv2D(50, (5,5), padding='same', activation='relu'),
+    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
+    keras.layers.Flatten(),
+    keras.layers.Dense(500, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
+])
+```
+
+We can see some details about the model:
+```python
+model.summary()
+```
+```python
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_2 (Conv2D)            (None, 28, 28, 20)        520       
+_________________________________________________________________
+max_pooling2d_2 (MaxPooling2 (None, 14, 14, 20)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 14, 14, 50)        25050     
+_________________________________________________________________
+max_pooling2d_3 (MaxPooling2 (None, 7, 7, 50)          0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 2450)              0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 500)               1225500   
+_________________________________________________________________
+dense_3 (Dense)              (None, 10)                5010      
+=================================================================
+Total params: 1,256,080
+Trainable params: 1,256,080
+Non-trainable params: 0
+_________________________________________________________________
+```
+It is important to note that the first layer has an input shape argument of (28, 28, 1). This is because the first convolutional layer expects each input example to be a 28x28 image, each with 1 channel (because the images are greyscale; if they were color it woudl be 3 for RGB).  However, the shape of our training set is (60000, 28, 28) as we saw in the simple NN example. Thus, we need to reshape our train and test images to match what the model expects:
+
+```python
+#reshape the model
+train_images=train_images.reshape(train_images.shape[0], 28, 28, 1)
+test_images=test_images.reshape(test_images.shape[0], 28, 28 ,1) 
+```
+
+The final layer of the CNN model will output a vector of size 10 for each label. Each element of the vector is a "probability" that indicates the confidence of the model to assign that input example to a particular class. However, our train and test labels as defined in the simple neural network example are not vectors but rather integers, which we need to convert to vectors in what is cahlled "one hot" encoding.
+
+With one hot encoding, each label is represented by a vector, and each element of the vector will be of value 0 or 1 depending on what class the label corresponds to. (e.g. [0,0,0,1,0,0,0,0,0,0] would be class #3).
+
+``python
+#convert current representation of the labels to "One Hot Representation"
+train_labels=keras.utils.to_categorical(train_labels)
+test_labels=keras.utils.to_categorical(test_labels)
+```
+
+```python
+#display the new train and test dimensions
+print('train_images shape:', train_images.shape)
+print('test_images shape:', test_images.shape)
+print('train_labels shape:', train_labels.shape)
+print('test_labels shape:', test_labels.shape)
+```
+```python
+train_images shape: (60000, 28, 28, 1)
+test_images shape: (10000, 28, 28, 1)
+train_labels shape: (60000, 10)
+test_labels shape: (10000, 10)
+```
+
+Now, we are read to compile the model. 
+```python
+#Compile the model using Adam Optimizer and categorical crossentropy loss
+model.compile(optimizer=tf.train.AdamOptimizer(), 
+             loss='categorical_crossentropy',
+              metrics=['accuracy'])
+```
+
+And finally, let's train!
+
+```python
+model.fit(train_images, train_labels, epochs=5)
+```
+
 
 [WIP]
