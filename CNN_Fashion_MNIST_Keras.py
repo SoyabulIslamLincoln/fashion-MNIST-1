@@ -10,13 +10,7 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-#from keras.layers import Conv2D, MaxPool2D, Flatten
-#from keras.layers import Dense, Dropout
-#from keras.utils import np_utils
-
-
 print("Tensorflow Version:", tf.__version__)
-
 
 
 #import the data
@@ -115,7 +109,6 @@ print('Test accuracy:', test_acc)
 #Make Predictions
 predictions = model.predict(test_images)
 predictions[0]
-
 
 
 #label with the highest confidence value
