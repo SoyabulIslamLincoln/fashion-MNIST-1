@@ -35,7 +35,7 @@ So! - here starts my adventure in building a neural network classifier using Fas
 - First, I build a simple 3 layer neural network with fully connected layers 
 - Then, I build a slightly larger Convolutional Neural Network
 
-**Goal:** To show how the training and test accuracy improves with changing the neural network architecture.
+**Goal:** To show how the training and test accuracy improves with a more optimized neural network architecture.
 
 
 # Simple Neural Network
@@ -167,7 +167,7 @@ print('Test accuracy:', test_acc)
 Test accuracy: 0.8732
 ```
 
-We get to a train accuracy of 89.02% and a test accuracy of 87.32%, not bad for a 3 layer network!
+We get to a **train accuracy of 89.02%** and a **test accuracy of 87.32%**, not bad for a 3 layer network!
 
 But can we do better? 
 
@@ -269,5 +269,33 @@ And finally, let's train!
 model.fit(train_images, train_labels, epochs=5)
 ```
 
+```python
+Epoch 1/5
+60000/60000 [==============================] - 119s 2ms/step - loss: 0.3882 - acc: 0.8598
+Epoch 2/5
+60000/60000 [==============================] - 118s 2ms/step - loss: 0.2579 - acc: 0.9047
+Epoch 3/5
+60000/60000 [==============================] - 118s 2ms/step - loss: 0.2128 - acc: 0.9200
+Epoch 4/5
+60000/60000 [==============================] - 121s 2ms/step - loss: 0.1791 - acc: 0.9327
+Epoch 5/5
+60000/60000 [==============================] - 119s 2ms/step - loss: 0.1521 - acc: 0.9428
+```
+Let's evaluate the accuracy against the test images:
 
-[WIP]
+```python
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print('Test accuracy:', test_acc)
+```
+```python
+10000/10000 [==============================] - 7s 725us/step
+Test accuracy: 0.918
+```
+
+With the CNN model, we get to a **train accuracy of 94.28%** and a **test accuracy of 91.8%**! 
+
+From this we can see that implementing a CNN model allowed us to increase the train and test accuracy in our Fashion MNIST classifier. Optimization of the neural network architecture is a powerful way to improve the performance of your algorithm. 
+
+I will caveat that in this case, there are still other opportunities for improvements. Maybe running the training for longer or getting a bigger network might improve the train accuracy. Another observation is that the test accuracy is lower than the train accuracy, which could indicate a high variance issue. Maybe adding regularization techniques such as Dropout might help as well. 
+
+In any case, this example is a good demonstration of how to build and train simple and convolutional neural networks :)
