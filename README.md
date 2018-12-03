@@ -235,7 +235,7 @@ The final layer of the CNN model will output a vector of size 10 for each label.
 
 With one hot encoding, each label is represented by a vector, and each element of the vector will be of value 0 or 1 depending on what class the label corresponds to. (e.g. [0,0,0,1,0,0,0,0,0,0] would be class #3).
 
-``python
+```python
 #convert current representation of the labels to "One Hot Representation"
 train_labels=keras.utils.to_categorical(train_labels)
 test_labels=keras.utils.to_categorical(test_labels)
